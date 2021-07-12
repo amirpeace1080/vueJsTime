@@ -2,7 +2,10 @@
   <div>
       <h1>Search-Todo</h1>
       <input type="text" :value="title" @input="onInput" />
-      <ul>
+
+      <h4 v-if="loading">Loading</h4>
+
+      <ul v-else>
           <li v-for="item in list" :key="item.id"> {{item.title}} </li>
       </ul>
   </div>
@@ -11,23 +14,32 @@
 <script>
 export default {
     fetch(){
-        return this.$axios.$get("https://jsonplaceholder.typicode.com/todos", {params:{
-            title_like:this.title
-        }})
-        .then((response)=>{
-            this.list = response
-        })
+        return this.service()
     },
     data() {
         return {
             title: '',
-            list: []
+            list: [],
+            loading: false,
         }
     },
     methods: {
+        service(){
+            this.loading = true;
+            return this.$axios.$get("https://jsonplaceholder.typicode.com/todos", {params:{
+            title_like:this.title
+        }})
+        .then((response)=>{
+            this.list = response
+            this.loading= false;
+        }).catch((e)=>{
+            this.loading = flase;
+            console.log(e);
+        })
+        },
         onInput(e){
             this.title = e.target.value;
-            this.$fetch()
+            this.service()
         }
     },
 }
