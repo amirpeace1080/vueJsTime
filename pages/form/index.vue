@@ -2,12 +2,17 @@
   <div>
     <h1>Form</h1>
     <label>First Name : </label>
-    <input type="text" v-model="firstName" />
+    <AppTextInput v-model="firstName" />
   </div>
 </template>
 
 <script>
+import AppTextInput from '@/components/ui/AppTextInput.vue'
+
 export default {
+    components:{
+        AppTextInput,
+    },
     data() {
         return {
             firstName: '',
